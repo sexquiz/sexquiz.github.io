@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sex Values Self-Assessment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8e44ad;
+            --primary-light: #9b59b6;
+            --secondary: #3498db;
+            --light: #f9f7fd;
+            --dark: #333;
+            --gray: #777;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --shadow: 0 5px 15px rgba(0,0,0,0.1);
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        /* Dynamic Header */
+        .dynamic-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .dynamic-header h3 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .dynamic-header p {
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .dynamic-header .answer {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h2 i {
+            font-size: 1.8rem;
+        }
+        
+        .intro-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .disclaimer {
+            background-color: #fff8e1;
+            border-left: 4px solid var(--warning);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(142, 68, 173, 0.3);
+        }
+        
+        .btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(142, 68, 173, 0.4);
+        }
+        
+        .btn-big {
+            padding: 20px 40px;
+            font-size: 1.3rem;
+            margin: 20px auto;
+            display: block;
+            width: fit-content;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: #2980b9;
+            box-shadow: 0 6px 8px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            box-shadow: none;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .assessment-section {
+            display: none;
+        }
+        
+        .active-section {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--light);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .question:hover {
+            background: #f0ebf9;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: var(--dark);
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .option {
+            position: relative;
+        }
+        
+        .option input {
+            display: none;
+        }
+        
+        .option label {
+            display: block;
+            padding: 18px 15px;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-weight: 500;
+            border: 2px solid #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .option input:checked + label {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 8px rgba(142, 68, 173, 0.3);
+        }
+        
+        .option label:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        
+        .results-section {
+            text-align: center;
+        }
+        
+        .value-category {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--light);
+            border-radius: 12px;
+            text-align: left;
+        }
+        
+        .value-category h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 10px;
+            transition: width 1s ease;
+            position: relative;
+        }
+        
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent);
+            background-size: 20px 20px;
+        }
+        
+        .interpretation {
+            font-style: italic;
+            color: var(--gray);
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .section-indicator {
+            text-align: center;
+            margin: 25px 0;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+        
+        .progress-tracker {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 10px;
+        }
+        
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .step.completed {
+            background: var(--success);
+            color: white;
+        }
+        
+        .how-to-use {
+            margin: 30px 0;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .step-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+        
+        .step-card h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .faq-section {
+            margin: 40px 0;
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .faq-question {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background: var(--primary-light);
+        }
+        
+        .faq-answer {
+            background: white;
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-answer.active {
+            padding: 20px;
+            max-height: 500px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
+        }
+        
+        .hero-section {
+            background: var(--gradient);
+            color: white;
+            padding: 50px 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .hero-section h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .hero-section p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .navigation button {
+                width: 100%;
+            }
+            
+            .steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-big {
+                padding: 18px 30px;
+                font-size: 1.2rem;
+            }
+            
+            .dynamic-header {
+                padding: 12px 15px;
+            }
+            
+            .dynamic-header h3 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Dynamic Header -->
+        <div id="dynamic-header" class="dynamic-header" style="display: none;">
+            <h3><i class="fas fa-question-circle"></i> Question <span id="header-question-num">1</span>: <span id="header-question-text">How important is talking openly about sexual boundaries with a partner?</span></h3>
+            <p>Your answer: <span id="header-answer" class="answer">Not yet answered</span></p>
+        </div>
+        
+        <div class="hero-section">
+            <h1><i class="fas fa-heart"></i> Sex Values Self-Assessment</h1>
+            <p>Understand your personal values and boundaries regarding sexuality in a safe, private space</p>
+            <button id="hero-start-btn" class="btn btn-big">
+                <i class="fas fa-play-circle"></i> Start Assessment Now
+            </button>
+        </div>
+        
+        <section id="intro-section" class="card active-section">
+            <h2><i class="fas fa-info-circle"></i> Welcome to Your Self-Discovery Journey</h2>
+            <p class="intro-text">
+                This self-assessment is designed to help you better understand your personal values, comfort levels, 
+                and boundaries when it comes to sexuality and intimate relationships. It's a private tool for self-reflection 
+                that can help you make more informed decisions and communicate your needs more effectively.
+            </p>
+            
+            <div class="disclaimer">
+                <p>
+                    <strong><i class="fas fa-exclamation-triangle"></i> Important Note:</strong> This assessment is for educational 
+                    and self-reflection purposes only. It is not a diagnostic tool and does not replace professional advice. 
+                    Your responses are completely private and not stored anywhere. If any questions make you uncomfortable, 
+                    you can skip them or stop the assessment at any time.
+                </p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>100% Private</h3>
+                    <p>Your answers stay on your device</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>10 Minutes</h3>
+                    <p>Quick and focused assessment</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Personalized Results</h3>
+                    <p>Get insights about your values</p>
+                </div>
+            </div>
+            
+            <div class="how-to-use">
+                <h3><i class="fas fa-play-circle"></i> How It Works</h3>
+                <div class="steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Answer Questions</h3>
+                        <p>Respond to 10 simple questions about your values and comfort levels</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>Review Results</h3>
+                        <p>Get immediate feedback on your personal values profile with visual charts</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Reflect & Grow</h3>
+                        <p>Use the insights for personal reflection and relationship communication</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="start-btn" class="btn btn-big">
+                <i class="fas fa-play"></i> Begin Assessment
+            </button>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="faq-toggle-btn" class="btn btn-outline">
+                    <i class="fas fa-question-circle"></i> View Frequently Asked Questions
+                </button>
+            </div>
+        </section>
+        
+        <section id="faq-section" class="card" style="display: none;">
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is this assessment for?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>This assessment helps you reflect on your personal values, boundaries, and comfort levels regarding sexuality and intimate relationships. It's designed for self-awareness and personal growth, helping you understand your own needs and preferences better.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is my information kept private?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, absolutely. This assessment runs entirely in your browser. Your answers are not stored on any server or database. When you close the page, your responses are gone. We don't collect any personal information.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How long does it take to complete?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The assessment contains 10 simple questions and takes about 5-7 minutes to complete. You can take your time and there's no rush. You can also pause and return later if needed.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What if I'm uncomfortable with a question?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>You can skip any question you're not comfortable answering. The assessment is designed to be a helpful tool, not a stressful experience. Your comfort and boundaries are the most important consideration.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I retake the assessment?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, you can retake the assessment as many times as you like. Your values may change over time, so it can be helpful to revisit occasionally to see if your perspectives have evolved.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button id="back-from-faq-btn" class="btn">
+                    <i class="fas fa-arrow-left"></i> Back to Introduction
+                </button>
+            </div>
+        </section>
+        
+        <section id="assessment-section" class="card assessment-section">
+            <h2><i class="fas fa-clipboard-list"></i> Assessment Questions</h2>
+            
+            <div class="section-indicator">
+                Question <span id="current-question">1</span> of 10
+            </div>
+            
+            <div class="progress-tracker">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+                <div class="step">4</div>
+                <div class="step">5</div>
+                <div class="step">6</div>
+                <div class="step">7</div>
+                <div class="step">8</div>
+                <div class="step">9</div>
+                <div class="step">10</div>
+            </div>
+            
+            <form id="assessment-form">
+                <div class="question" id="question-1">
+                    <p class="question-text">1. How important is talking openly about sexual boundaries with a partner?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q1-1" name="q1" value="5" required>
+                            <label for="q1-1">Very Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-2" name="q1" value="4">
+                            <label for="q1-2">Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-3" name="q1" value="3">
+                            <label for="q1-3">Neutral</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-4" name="q1" value="2">
+                            <label for="q1-4">Somewhat Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q1-5" name="q1" value="1">
+                            <label for="q1-5">Not Important</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question-2">
+                    <p class="question-text">2. How comfortable are you discussing sexual health with a partner?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q2-1" name="q2" value="5" required>
+                            <label for="q2-1">Very Comfortable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-2" name="q2" value="4">
+                            <label for="q2-2">Comfortable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-3" name="q2" value="3">
+                            <label for="q2-3">Neutral</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-4" name="q2" value="2">
+                            <label for="q2-4">Somewhat Uncomfortable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q2-5" name="q2" value="1">
+                            <label for="q2-5">Very Uncomfortable</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question-3">
+                    <p class="question-text">3. How important is emotional connection in a sexual relationship?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q3-1" name="q3" value="5" required>
+                            <label for="q3-1">Very Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-2" name="q3" value="4">
+                            <label for="q3-2">Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-3" name="q3" value="3">
+                            <label for="q3-3">Neutral</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-4" name="q3" value="2">
+                            <label for="q3-4">Somewhat Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q3-5" name="q3" value="1">
+                            <label for="q3-5">Not Important</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question-4">
+                    <p class="question-text">4. How do you feel about trying new things in a sexual relationship?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q4-1" name="q4" value="5" required>
+                            <label for="q4-1">Very Open</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-2" name="q4" value="4">
+                            <label for="q4-2">Open</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-3" name="q4" value="3">
+                            <label for="q4-3">Neutral</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-4" name="q4" value="2">
+                            <label for="q4-4">Somewhat Reluctant</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q4-5" name="q4" value="1">
+                            <label for="q4-5">Very Reluctant</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question-5">
+                    <p class="question-text">5. How important is consent in every sexual encounter?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q5-1" name="q5" value="5" required>
+                            <label for="q5-1">Extremely Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-2" name="q5" value="4">
+                            <label for="q5-2">Very Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-3" name="q5" value="3">
+                            <label for="q5-3">Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-4" name="q5" value="2">
+                            <label for="q5-4">Somewhat Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q5-5" name="q5" value="1">
+                            <label for="q5-5">Not Important</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question-6">
+                    <p class="question-text">6. How comfortable are you expressing your sexual needs and desires?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q6-1" name="q6" value="5" required>
+                            <label for="q6-1">Very Comfortable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-2" name="q6" value="4">
+                            <label for="q6-2">Comfortable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-3" name="q6" value="3">
+                            <label for="q6-3">Neutral</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-4" name="q6" value="2">
+                            <label for="q6-4">Somewhat Uncomfortable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q6-5" name="q6" value="1">
+                            <label for="q6-5">Very Uncomfortable</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question-7">
+                    <p class="question-text">7. How important is privacy regarding your sexual life?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q7-1" name="q7" value="5" required>
+                            <label for="q7-1">Very Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-2" name="q7" value="4">
+                            <label for="q7-2">Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-3" name="q7" value="3">
+                            <label for="q7-3">Neutral</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-4" name="q7" value="2">
+                            <label for="q7-4">Somewhat Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q7-5" name="q7" value="1">
+                            <label for="q7-5">Not Important</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question-8">
+                    <p class="question-text">8. How do you feel about sexual activity outside of a committed relationship?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q8-1" name="q8" value="1" required>
+                            <label for="q8-1">Always Acceptable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-2" name="q8" value="2">
+                            <label for="q8-2">Usually Acceptable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-3" name="q8" value="3">
+                            <label for="q8-3">Sometimes Acceptable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-4" name="q8" value="4">
+                            <label for="q8-4">Rarely Acceptable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q8-5" name="q8" value="5">
+                            <label for="q8-5">Never Acceptable</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question-9">
+                    <p class="question-text">9. How important is mutual satisfaction in a sexual relationship?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q9-1" name="q9" value="5" required>
+                            <label for="q9-1">Very Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-2" name="q9" value="4">
+                            <label for="q9-2">Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-3" name="q9" value="3">
+                            <label for="q9-3">Neutral</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-4" name="q9" value="2">
+                            <label for="q9-4">Somewhat Important</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q9-5" name="q9" value="1">
+                            <label for="q9-5">Not Important</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="question" id="question-10">
+                    <p class="question-text">10. How comfortable are you setting boundaries in intimate situations?</p>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" id="q10-1" name="q10" value="5" required>
+                            <label for="q10-1">Very Comfortable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-2" name="q10" value="4">
+                            <label for="q10-2">Comfortable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-3" name="q10" value="3">
+                            <label for="q10-3">Neutral</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-4" name="q10" value="2">
+                            <label for="q10-4">Somewhat Uncomfortable</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" id="q10-5" name="q10" value="1">
+                            <label for="q10-5">Very Uncomfortable</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            
+            <div class="navigation">
+                <button id="prev-btn" class="btn btn-secondary" disabled>
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button id="next-btn" class="btn">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+        
+        <section id="results-section" class="card assessment-section results-section">
+            <h2><i class="fas fa-chart-pie"></i> Your Personal Values Profile</h2>
+            <p>Based on your responses, here's an overview of your personal values regarding sexuality and relationships:</p>
+            
+            <div class="value-category">
+                <h3><i class="fas fa-comments"></i> Communication & Consent</h3>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Comfort with discussing boundaries and consent</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 85%"></div>
+                    </div>
+                </div>
+                <p class="interpretation">
+                    <i class="fas fa-lightbulb"></i> You appear to value open communication and clear consent in relationships. This strength can help you establish healthy boundaries and maintain mutual respect in intimate situations.
+                </p>
+            </div>
+            
+            <div class="value-category">
+                <h3><i class="fas fa-heart"></i> Emotional Connection</h3>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Importance of emotional intimacy</span>
+                        <span>70%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 70%"></div>
+                    </div>
+                </div>
+                <p class="interpretation">
+                    <i class="fas fa-lightbulb"></i> Emotional connection seems moderately to very important in your intimate relationships. You likely value relationships where emotional intimacy complements physical intimacy.
+                </p>
+            </div>
+            
+            <div class="value-category">
+                <h3><i class="fas fa-shield-alt"></i> Personal Boundaries</h3>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Clarity and firmness of personal boundaries</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 90%"></div>
+                    </div>
+                </div>
+                <p class="interpretation">
+                    <i class="fas fa-lightbulb"></i> You have well-defined personal boundaries and expect them to be respected. This self-awareness is valuable for maintaining healthy relationships and personal well-being.
+                </p>
+            </div>
+            
+            <div class="value-category">
+                <h3><i class="fas fa-compass"></i> Exploration & Openness</h3>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Openness to new experiences</span>
+                        <span>60%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 60%"></div>
+                    </div>
+                </div>
+                <p class="interpretation">
+                    <i class="fas fa-lightbulb"></i> You balance curiosity with caution when considering new sexual experiences. This balanced approach allows for growth while maintaining personal comfort levels.
+                </p>
+            </div>
+            
+            <div class="value-category">
+                <h3><i class="fas fa-handshake"></i> Relationship Context</h3>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Importance of relationship context</span>
+                        <span>75%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 75%"></div>
+                    </div>
+                </div>
+                <p class="interpretation">
+                    <i class="fas fa-lightbulb"></i> The context and commitment level of relationships matter to you when it comes to sexual activity. You likely prefer clarity in relationship definitions and expectations.
+                </p>
+            </div>
+            
+            <div class="disclaimer" style="margin-top: 30px;">
+                <p>
+                    <strong>Remember:</strong> This assessment provides a snapshot of your current values and is meant for self-reflection. 
+                    Your values may change over time, and that's a normal part of personal growth.
+                </p>
+            </div>
+            
+            <div class="navigation">
+                <button id="restart-btn" class="btn btn-big">
+                    <i class="fas fa-redo"></i> Take Assessment Again
+                </button>
+            </div>
+        </section>
+        
+        <footer>
+            <p>This assessment is for educational and self-reflection purposes only. It does not provide medical or psychological advice.</p>
+            <p>If you have concerns about your sexual health or relationships, consider consulting a healthcare provider or counselor.</p>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-shield-alt"></i> Privacy</a>
+                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+                <a href="#"><i class="fas fa-book"></i> Resources</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Section navigation
+            const introSection = document.getElementById('intro-section');
+            const faqSection = document.getElementById('faq-section');
+            const assessmentSection = document.getElementById('assessment-section');
+            const resultsSection = document.getElementById('results-section');
+            const startBtn = document.getElementById('start-btn');
+            const heroStartBtn = document.getElementById('hero-start-btn');
+            const faqToggleBtn = document.getElementById('faq-toggle-btn');
+            const backFromFaqBtn = document.getElementById('back-from-faq-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const restartBtn = document.getElementById('restart-btn');
+            const currentQuestionSpan = document.getElementById('current-question');
+            const steps = document.querySelectorAll('.progress-tracker .step');
+            const assessmentForm = document.getElementById('assessment-form');
+            
+            // Dynamic header elements
+            const dynamicHeader = document.getElementById('dynamic-header');
+            const headerQuestionNum = document.getElementById('header-question-num');
+            const headerQuestionText = document.getElementById('header-question-text');
+            const headerAnswer = document.getElementById('header-answer');
+            
+            // All 10 questions
+            const totalQuestions = 10;
+            let currentQuestion = 1;
+            
+            // Questions data
+            const questions = [
+                "How important is talking openly about sexual boundaries with a partner?",
+                "How comfortable are you discussing sexual health with a partner?",
+                "How important is emotional connection in a sexual relationship?",
+                "How do you feel about trying new things in a sexual relationship?",
+                "How important is consent in every sexual encounter?",
+                "How comfortable are you expressing your sexual needs and desires?",
+                "How important is privacy regarding your sexual life?",
+                "How do you feel about sexual activity outside of a committed relationship?",
+                "How important is mutual satisfaction in a sexual relationship?",
+                "How comfortable are you setting boundaries in intimate situations?"
+            ];
+            
+            // Show/hide questions
+            function updateQuestionDisplay() {
+                // Hide all questions
+                for (let i = 1; i <= totalQuestions; i++) {
+                    document.getElementById(`question-${i}`).style.display = 'none';
+                }
+                
+                // Show current question
+                document.getElementById(`question-${currentQuestion}`).style.display = 'block';
+                currentQuestionSpan.textContent = currentQuestion;
+                
+                // Update progress tracker
+                steps.forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    if (index + 1 === currentQuestion) {
+                        step.classList.add('active');
+                    } else if (index + 1 < currentQuestion) {
+                        step.classList.add('completed');
+                    }
+                });
+                
+                // Update button states
+                prevBtn.disabled = currentQuestion === 1;
+                nextBtn.innerHTML = currentQuestion === totalQuestions ? 
+                    'See Results <i class="fas fa-chart-pie"></i>' : 
+                    'Next <i class="fas fa-arrow-right"></i>';
+                
+                // Update dynamic header
+                updateDynamicHeader();
+            }
+            
+            // Update dynamic header with current question and answer
+            function updateDynamicHeader() {
+                headerQuestionNum.textContent = currentQuestion;
+                headerQuestionText.textContent = questions[currentQuestion - 1];
+                
+                // Check if current question has an answer
+                const currentQuestionName = `q${currentQuestion}`;
+                const selectedOption = document.querySelector(`input[name="${currentQuestionName}"]:checked`);
+                
+                if (selectedOption) {
+                    const selectedLabel = selectedOption.nextElementSibling.textContent;
+                    headerAnswer.textContent = selectedLabel;
+                } else {
+                    headerAnswer.textContent = "Not yet answered";
+                }
+            }
+            
+            // FAQ toggle functionality
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    answer.classList.toggle('active');
+                    const icon = this.querySelector('i');
+                    icon.classList.toggle('fa-chevron-down');
+                    icon.classList.toggle('fa-chevron-up');
+                });
+            });
+            
+            // Start assessment from hero section
+            heroStartBtn.addEventListener('click', function() {
+                introSection.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Start assessment
+            startBtn.addEventListener('click', function() {
+                introSection.classList.remove('active-section');
+                assessmentSection.classList.add('active-section');
+                dynamicHeader.style.display = 'block';
+                updateQuestionDisplay();
+                window.scrollTo(0, 0);
+            });
+            
+            // Toggle FAQ section
+            faqToggleBtn.addEventListener('click', function() {
+                introSection.style.display = 'none';
+                faqSection.style.display = 'block';
+                dynamicHeader.style.display = 'none';
+                window.scrollTo(0, 0);
+            });
+            
+            // Back from FAQ
+            backFromFaqBtn.addEventListener('click', function() {
+                faqSection.style.display = 'none';
+                introSection.style.display = 'block';
+                dynamicHeader.style.display = 'none';
+                window.scrollTo(0, 0);
+            });
+            
+            // Next button
+            nextBtn.addEventListener('click', function() {
+                // Check if current question is answered
+                const currentQuestionName = `q${currentQuestion}`;
+                const isAnswered = document.querySelector(`input[name="${currentQuestionName}"]:checked`);
+                
+                if (!isAnswered) {
+                    alert('Please select an answer before continuing.');
+                    return;
+                }
+                
+                if (currentQuestion < totalQuestions) {
+                    currentQuestion++;
+                    updateQuestionDisplay();
+                    window.scrollTo(0, 0);
+                } else {
+                    // Show results
+                    assessmentSection.classList.remove('active-section');
+                    resultsSection.classList.add('active-section');
+                    dynamicHeader.style.display = 'none';
+                    window.scrollTo(0, 0);
+                    
+                    // In a real implementation, we would calculate results based on answers
+                    // For this demo, we're using placeholder values
+                }
+            });
+            
+            // Previous button
+            prevBtn.addEventListener('click', function() {
+                if (currentQuestion > 1) {
+                    currentQuestion--;
+                    updateQuestionDisplay();
+                    window.scrollTo(0, 0);
+                }
+            });
+            
+            // Add event listeners to all radio buttons to update header when answers change
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.name === `q${currentQuestion}`) {
+                        updateDynamicHeader();
+                    }
+                });
+            });
+            
+            // Restart assessment
+            restartBtn.addEventListener('click', function() {
+                resultsSection.classList.remove('active-section');
+                introSection.classList.add('active-section');
+                dynamicHeader.style.display = 'none';
+                currentQuestion = 1;
+                updateQuestionDisplay();
+                
+                // Reset form
+                assessmentForm.reset();
+                
+                window.scrollTo(0, 0);
+            });
+        });
+    </script>
+</body>
+</html>
